@@ -1,132 +1,161 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frais réels ou abattement ?</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frais réels ou abattement automatique ?</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
       margin: 0;
       padding: 0;
+      color: #333;
     }
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    h1 {
+    header {
+      background-color: #1e88e5;
+      color: white;
+      padding: 1rem;
       text-align: center;
-      font-size: 2em;
-      margin-bottom: 0.5em;
+    }
+    header img {
+      width: 60px;
+      height: auto;
+      display: block;
+      margin: 0 auto 0.5rem auto;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      color: #1e88e5;
     }
     label {
       display: block;
-      margin-top: 20px;
-      font-weight: 600;
+      margin-top: 1rem;
+      font-weight: bold;
     }
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 8px;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1em;
+      border-radius: 5px;
     }
     button {
-      margin-top: 30px;
-      width: 100%;
-      padding: 12px;
-      font-size: 1.1em;
-      background-color: #0077ff;
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #1e88e5;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      font-weight: bold;
-      transition: background 0.2s ease;
+      font-size: 1rem;
     }
     button:hover {
-      background-color: #005fd1;
+      background-color: #1565c0;
     }
-    .result {
-      margin-top: 30px;
-      padding: 20px;
-      background-color: #eaf6ff;
-      border-left: 5px solid #0077ff;
-      border-radius: 8px;
-      font-size: 1.1em;
+    .resultat {
+      margin-top: 2rem;
+      background-color: #e3f2fd;
+      padding: 1rem;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Euro_sign.svg/120px-Euro_sign.svg.png" alt="Logo">
     <h1>Frais réels ou abattement de 10% ?</h1>
+  </header>
+  <main>
+    <p>
+      Ce site t'aide à choisir entre deux options fiscales : l'abattement automatique de 10 % ou la déclaration de tes frais professionnels réels. Il calcule instantanément laquelle est la plus avantageuse pour toi.
+    </p>
 
-    <label for="km">Nombre de kilomètres aller (domicile → travail) :</label>
-    <input type="number" id="km" placeholder="Ex : 12">
+    <h2>1. Remplis les informations suivantes :</h2>
+    <label for="revenu">Revenu brut imposable (€) :</label>
+    <input type="number" id="revenu" />
 
-    <label for="jours">Nombre de jours travaillés dans l'année :</label>
-    <input type="number" id="jours" placeholder="Ex : 214">
+    <label for="km">Nombre de kilomètres aller-retour domicile-travail sur l'année :</label>
+    <input type="number" id="km" />
 
     <label for="cv">Puissance fiscale du véhicule (CV) :</label>
-    <input type="number" id="cv" placeholder="Ex : 5">
+    <input type="number" id="cv" />
 
-    <label for="stationnement">Frais de stationnement annuels (€) :</label>
-    <input type="number" id="stationnement" placeholder="Ex : 350">
+    <label for="stationnement">Frais de stationnement (€) :</label>
+    <input type="number" id="stationnement" />
 
-    <label for="revenu">Revenu net imposable (€) :</label>
-    <input type="number" id="revenu" placeholder="Ex : 22000">
+    <label for="repas">Frais de repas (€) :</label>
+    <input type="number" id="repas" />
 
-    <button onclick="calculer()">Calculer l'option la plus avantageuse</button>
+    <button onclick="calculer()">Comparer les deux options</button>
 
-    <div class="result" id="resultat"></div>
-  </div>
+    <div class="resultat" id="resultat"></div>
 
+    <h2>2. Comment faire selon le résultat :</h2>
+    <p>
+      <strong>🟦 Si l'abattement de 10% est plus avantageux :</strong><br>
+      Tu n'as rien à faire ! L'administration fiscale applique cet abattement automatiquement sur ton revenu brut. C’est simple et rapide.
+    </p>
+    <p>
+      <strong>🟩 Si les frais réels sont plus avantageux :</strong><br>
+      Tu dois cocher la case « frais réels » dans ta déclaration d’impôts en ligne (ou papier) et saisir manuellement le montant total de tes frais : kilométriques, stationnement, péages, repas, etc. Garde les justificatifs en cas de contrôle.
+    </p>
+
+    <h2>3. Détail du calcul :</h2>
+    <ul>
+      <li><strong>Abattement automatique :</strong> Revenu × 10%</li>
+      <li><strong>Frais kilométriques :</strong> Nombre total de kilomètres × coefficient du barème officiel (selon les CV fiscaux)</li>
+      <li><strong>Frais réels :</strong> Frais kilométriques + frais de stationnement + frais de repas</li>
+    </ul>
+  </main>
+  <footer>
+    Fait avec ❤️ pour t'aider à payer moins d'impôts.
+  </footer>
   <script>
     function calculer() {
-      const km = parseFloat(document.getElementById('km').value);
-      const jours = parseFloat(document.getElementById('jours').value);
-      const cv = parseFloat(document.getElementById('cv').value);
-      const stationnement = parseFloat(document.getElementById('stationnement').value);
       const revenu = parseFloat(document.getElementById('revenu').value);
+      const km = parseFloat(document.getElementById('km').value);
+      const cv = parseInt(document.getElementById('cv').value);
+      const stationnement = parseFloat(document.getElementById('stationnement').value);
+      const repas = parseFloat(document.getElementById('repas').value);
 
-      if (isNaN(km) || isNaN(jours) || isNaN(cv) || isNaN(stationnement) || isNaN(revenu)) {
-        document.getElementById('resultat').innerHTML = "<strong>Merci de remplir tous les champs.</strong>";
+      if (isNaN(revenu) || isNaN(km) || isNaN(cv) || isNaN(stationnement) || isNaN(repas)) {
+        document.getElementById('resultat').innerText = 'Merci de remplir tous les champs.';
         return;
       }
 
-      let taux = 0;
-      if (cv <= 3) taux = 0.294;
-      else if (cv === 4) taux = 0.323;
-      else if (cv === 5) taux = 0.347;
-      else if (cv === 6) taux = 0.372;
-      else taux = 0.407;
+      let coef;
+      if (cv === 3) coef = 0.295;
+      else if (cv === 4) coef = 0.323;
+      else if (cv === 5) coef = 0.349;
+      else if (cv === 6) coef = 0.364;
+      else coef = 0.401; // Pour 7 CV ou plus
 
-      const distanceTotale = km * 2 * jours;
-      const fraisKilometriques = distanceTotale * taux;
-      const totalFraisReels = fraisKilometriques + stationnement;
+      const fraisKm = km * coef;
+      const fraisReels = fraisKm + stationnement + repas;
       const abattement10 = revenu * 0.10;
 
-      let message = `<strong>Frais réels :</strong> ${totalFraisReels.toFixed(2)} €<br>` +
-                    `<strong>Abattement 10% :</strong> ${abattement10.toFixed(2)} €<br><br>`;
+      let message = `<p><strong>Détail du calcul :</strong><br>
+        Frais kilométriques : ${fraisKm.toFixed(2)} €<br>
+        Frais de stationnement : ${stationnement.toFixed(2)} €<br>
+        Frais de repas : ${repas.toFixed(2)} €<br>
+        Total frais réels : ${fraisReels.toFixed(2)} €<br>
+        Abattement 10% : ${abattement10.toFixed(2)} €</p>`;
 
-      if (totalFraisReels > abattement10) {
-        message += `<strong>✅ Les frais réels sont plus avantageux.</strong><br><br>` +
-                   `Pour les déclarer : coche "Frais réels" dans ta déclaration et complète la case 1AK.`;
+      if (fraisReels > abattement10) {
+        message += '<p><strong>✅ Les frais réels sont plus avantageux.</strong><br>Tu peux les déclarer pour réduire ton impôt !</p>';
       } else {
-        message += `<strong>✅ L'abattement de 10% est plus avantageux.</strong><br><br>` +
-                   `C’est l’option par défaut. Tu n’as rien à faire, juste à valider tes revenus.`;
-      }
-
-      document.getElementById('resultat').innerHTML = message;
-    }
-  </script>
-</body>
-</html>
+        message += '<p><strong>✅ L’abattement automatiq
