@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frais réels ou abattement 10% ?</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; max-width: 700px; line-height: 1.6; }
+    h1, h2 { color: #333; }
+    label { display: block; margin-top: 15px; }
+    input { padding: 5px; width: 100%; max-width: 300px; }
+    button { margin-top: 20px; padding: 10px 20px; cursor: pointer; }
+    .result { margin-top: 30px; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+    .tuto { margin-top: 20px; padding: 15px; background: #e0f7fa; border-left: 5px solid #00acc1; }
+  </style>
+</head>
+<body>
+  <h1>Frais réels ou abattement de 10% ?</h1>
+
+  <p>💡 En France, les salariés peuvent déduire de leurs revenus imposables :
+    <ul>
+      <li>Soit un <strong>abattement automatique de 10%</strong>, appliqué directement</li>
+      <li>Soit leurs <strong>frais réels</strong> (déplacements, repas, stationnement...)</li>
+    </ul>
+    Ce site t’aide à savoir quelle option est la plus avantageuse pour toi 💸
+  </p>
+
+  <h2>🔢 Calculateur</h2>
+  <label for="revenu">Revenu net imposable (€)</label>
+  <input type="number" id="revenu">
+
+  <label for="kilometres">Distance domicile-travail (km aller)</label>
+  <input type="number" id="kilometres">
+
+  <label for="jours">Nombre de jours travaillés</label>
+  <input type="number" id="jours">
+
+  <label for="stationnement">Frais de stationnement (€)</label>
+  <input type="number" id="stationnement">
+
+  <label for="cv">Puissance fiscale du véhicule (CV)</label>
+  <input type="number" id="cv">
+
+  <button onclick="calculer()">Calculer</button>
+
+  <div class="result" id="result"></div>
+  <div class="tuto" id="tuto"></div>
+
+  <script>
+    const bareme = {
+      3: km => 0.456 * km,
+      4: km => 0.523 * km,
+      5: km => 0.548 * km,
+      6: km => 0.574 * km,
+      7: km => 0.601 * km
+    };
+
+    function calculer() {
+      const revenu = parseFloat(document.getElementById('revenu').value);
+      const km = parseFloat(document.getElementById('kilometres').value);
+      const jours = parseFloat(document.getElementById('jours').value);
+      const stationnement = parseFloat(document.getElementById('stationnement').value);
+      const cv = parseInt(document.getElementById('cv').value);
+
+      const allerRetour = km * 2;
+      const kmTotal = allerRetour * jours;
+      const coeff = bareme[cv] || (k => 0);
+      const fraisReels = coeff(kmTotal) + stationnement;
+      const abattement = revenu * 0.10;
+
+      let resultText = `Frais réels estimés : <strong>${fraisReels.toFixed(2)} €</strong><br>` +
+                       `Abattement de 10% : <strong>${abattement.toFixed(2)} €</strong><br><br>`;
+
+      let tuto = "";
+
+      if (fraisReels > abattement) {
+        const diff = (fraisReels - abattement).toFixed(2);
+        resultText += `<strong>✅ Les frais réels sont plus avantageux de ${diff} €.</strong>`;
+        tuto = `
+          <strong>Comment en bénéficier ?</strong><br>
+          - Quand tu fais ta déclaration en ligne, coche la case pour déclarer aux frais réels<br>
+          - Dans la case <strong>1AK</strong>, indique le montant total de tes frais<br>
+          - Garde les justificatifs au cas où l'administration te les demande<br>
+          - Si tu fais ta déclaration papier, c’est la même chose : coche "frais réels" et remplis la case 1AK`
+      } else {
+        const diff = (abattement - fraisReels).toFixed(2);
+        resultText += `<strong>✅ L'abattement automatique est plus avantageux de ${diff} €.</strong>`;
+        tuto = `
+          <strong>Comment en bénéficier ?</strong><br>
+          - Tu n’as rien à faire !<br>
+          - L’administration fiscale applique automatiquement cet abattement de 10%<br>
+          - Il s'applique à tous les salariés par défaut`
+      }
+
+      document.getElementById('result').innerHTML = resultText;
+      document.getElementById('tuto').innerHTML = tuto;
+    }
+  </script>
+</body>
+</html>
